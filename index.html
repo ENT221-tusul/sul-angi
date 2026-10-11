@@ -3,215 +3,522 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F2F4F1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1713" media="(prefers-color-scheme: dark)">
 <title>Сул анги · C байр 5–7 давхар</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
-:root{--navy:#1E2A78;--wall:#DCEBE3;--plate:#FFFFFF;--ink:#1A1F36;--muted:#4F5B6B;--free:#1F7A45;--soon:#9A6A00;--warn:#B3261E;--line:#B9CCC2;--dim:#EEF3F0;
+:root{
+ --paper:#F2F4F1;--card:#FFFFFF;--ink:#11251B;--muted:#5A6B62;--line:#DCE3DE;
+ --go:#0F8A4C;--go-ink:#0B6B3A;--go-soft:#E2F2E8;--on-go:#FFFFFF;
+ --soon:#E9A126;--soon-ink:#8A5208;--on-soon:#3A2400;
+ --off:#DDE3DF;--off-ink:#7B8A82;
+ --warn:#C2362B;--warn-soft:#F8E4E1;
  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--navy:#9DAAF5;--wall:#16211C;--plate:#202C26;--ink:#E8EEF0;--muted:#A7B3BC;--free:#6FD39A;--soon:#E8B54A;--warn:#FF8A80;--line:#33443B;--dim:#1B2620}}
-:root[data-theme="dark"]{--navy:#9DAAF5;--wall:#16211C;--plate:#202C26;--ink:#E8EEF0;--muted:#A7B3BC;--free:#6FD39A;--soon:#E8B54A;--warn:#FF8A80;--line:#33443B;--dim:#1B2620}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --paper:#0F1713;--card:#18231D;--ink:#E6EEE9;--muted:#9AADA3;--line:#26352D;
+ --go:#2FB86E;--go-ink:#6BD9A0;--go-soft:#173A27;--on-go:#05140B;
+ --soon:#E9A126;--soon-ink:#F2C063;--on-soon:#2A1A00;
+ --off:#26332C;--off-ink:#7F9188;
+ --warn:#F07B70;--warn-soft:#3B1E1B}}
+:root[data-theme="dark"]{
+ --paper:#0F1713;--card:#18231D;--ink:#E6EEE9;--muted:#9AADA3;--line:#26352D;
+ --go:#2FB86E;--go-ink:#6BD9A0;--go-soft:#173A27;--on-go:#05140B;
+ --soon:#E9A126;--soon-ink:#F2C063;--on-soon:#2A1A00;
+ --off:#26332C;--off-ink:#7F9188;
+ --warn:#F07B70;--warn-soft:#3B1E1B}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
-body{margin:0;background:var(--wall);color:var(--ink);font-family:Montserrat,"Segoe UI",Arial,sans-serif;font-weight:500;line-height:1.45}
-main{max-width:560px;margin:0 auto;padding:20px 16px 40px}
-h1{font-size:1.65rem;font-weight:800;margin:4px 0 2px;color:var(--navy);letter-spacing:-.01em}
-.sub{color:var(--muted);margin:0 0 18px;font-size:.95rem}
-.banner{background:var(--plate);border-left:4px solid var(--soon);padding:10px 12px;font-size:.85rem;margin-bottom:16px;border-radius:4px}
-.days{display:flex;gap:6px;margin-bottom:10px}
-.days button,.times button{font:inherit;font-weight:600;border:1.5px solid var(--navy);background:transparent;color:var(--navy);border-radius:999px;padding:7px 0;cursor:pointer;flex:1;min-width:0}
-.days button[aria-pressed="true"],.times button[aria-pressed="true"]{background:var(--navy);color:var(--plate)}
-.times{display:flex;gap:6px;align-items:center;margin-bottom:22px}
-.times button{flex:0 0 auto;padding:7px 14px}
-.times input{font:inherit;font-weight:600;border:1.5px solid var(--line);background:var(--plate);color:var(--ink);border-radius:999px;padding:6px 12px;flex:1;min-width:0}
-button:focus-visible,input:focus-visible{outline:3px solid var(--free);outline-offset:2px}
-.status{font-size:1.05rem;font-weight:700;margin:0 0 4px}
-.hint{color:var(--muted);font-size:.85rem;margin:0 0 10px}
-.floor{margin:22px 0 10px;font-weight:700;color:var(--muted);font-size:.9rem}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
-.plate{display:block;width:100%;text-align:left;font:inherit;color:inherit;background:var(--plate);border:none;border-radius:6px;padding:6px;cursor:pointer}
-.plate:disabled{cursor:default}
-.plate .in{border:2px solid var(--navy);border-radius:3px;padding:10px 12px 9px}
-.num{font-weight:800;font-size:1.9rem;color:var(--navy);letter-spacing:-.01em;line-height:1.05}
-.until{margin-top:6px;font-weight:600;font-size:.88rem;color:var(--free)}
-.until.short{color:var(--soon)}
-.tag{margin-top:6px;font-size:.8rem;font-weight:700;color:var(--warn)}
-.tag.mine{color:var(--free)}
-.plate.reported{background:var(--dim)}
-.plate.reported .in{border-style:dashed}
-.plate.reported .num{opacity:.6}
-.empty{background:var(--plate);border-radius:6px;padding:18px;font-weight:600}
-.busy{margin-top:26px;color:var(--muted);font-size:.9rem}
-.note{margin-top:28px;padding-top:14px;border-top:1px solid var(--line);color:var(--muted);font-size:.82rem}
-.linkbtn{font:inherit;font-weight:600;background:none;border:none;color:var(--navy);text-decoration:underline;padding:0;cursor:pointer;margin-top:10px}
-dialog{border:none;border-radius:12px 12px 0 0;padding:0;width:100%;max-width:560px;margin:auto auto 0;background:var(--plate);color:var(--ink)}
-dialog::backdrop{background:rgba(10,15,30,.45)}
-.sheet{padding:20px 18px calc(18px + env(safe-area-inset-bottom,0px))}
-.sheet h2{margin:0 0 4px;font-size:1.6rem;font-weight:800;color:var(--navy)}
-.sheet p{margin:0 0 16px;color:var(--muted);font-size:.9rem}
+[hidden]{display:none!important}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-weight:400;line-height:1.45;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+main{max-width:520px;margin:0 auto;padding:16px 16px 40px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--go);outline-offset:2px}
+
+/* толгой */
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{font-weight:800;font-size:1.05rem;letter-spacing:-.01em}
+.place{color:var(--muted);font-size:.85rem;font-weight:500}
+.rate{border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:7px 13px;font-weight:700;font-size:.85rem;white-space:nowrap}
+.rate.done{border-color:var(--go);color:var(--go-ink);background:var(--go-soft)}
+.when{display:grid;grid-template-columns:1fr 1.25fr;gap:8px;margin:16px 0 0}
+.when button{display:flex;align-items:center;justify-content:center;gap:8px;border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:11px 10px;font-weight:700;font-size:.92rem;min-width:0;white-space:nowrap}
+.when button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--off-ink);flex:none}
+.when button[aria-pressed="true"] .dot{background:var(--go);animation:pulse 2.4s ease-out infinite}
+.chev{width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);margin:-4px 0 0 2px;opacity:.7;flex:none}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--go) 60%,transparent)}70%,100%{box-shadow:0 0 0 7px transparent}}
+@media (prefers-reduced-motion:reduce){.when button .dot{animation:none!important}}
+
+.banner{border-radius:10px;padding:10px 12px;font-size:.85rem;font-weight:500;margin:14px 0 0;background:var(--soon-soft,#FCF1DC);color:var(--soon-ink)}
+.banner.err{background:var(--warn-soft);color:var(--warn)}
+
+h1{font-size:2.15rem;line-height:1.06;font-weight:800;letter-spacing:-.025em;margin:18px 0 6px}
+.lead{color:var(--muted);font-size:.92rem;margin:0 0 16px;max-width:36em}
+
+/* барилгын зүсэлт */
+.bld{background:var(--card);border-radius:16px;padding:6px 12px 12px;border:1px solid var(--line)}
+.roof{height:4px;border-radius:2px;background:var(--ink);margin:8px 0 0}
+.fl{display:grid;grid-template-columns:22px 1fr;align-items:center;gap:8px;border-bottom:2px solid var(--ink)}
+.fl b{font-size:.95rem;font-weight:800;color:var(--muted);text-align:center}
+.cells{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;padding:6px 0}
+.cell{height:36px;border:0;border-radius:6px;padding:0;background:var(--off);color:var(--off-ink);font-size:.74rem;font-weight:700;font-variant-numeric:tabular-nums;transition:transform .12s}
+.cell:active{transform:scale(.94)}
+.cell.free{background:var(--go);color:var(--on-go)}
+.cell.short{background:var(--soon);color:var(--on-soon)}
+.cell.rep{background:var(--card);color:var(--warn);box-shadow:inset 0 0 0 2px var(--warn)}
+.cell.mine{background:var(--card);color:var(--go-ink);box-shadow:inset 0 0 0 2px var(--go)}
+.cell.dim{opacity:.38}
+.key{display:flex;flex-wrap:wrap;gap:6px 14px;margin:10px 0 0;font-size:.78rem;color:var(--muted);font-weight:500}
+.key span{display:flex;align-items:center;gap:6px}
+.key i{width:12px;height:12px;border-radius:3px;display:inline-block;background:var(--off)}
+.key i.free{background:var(--go)}.key i.short{background:var(--soon)}.key i.rep{background:transparent;box-shadow:inset 0 0 0 2px var(--warn)}
+
+/* шүүлтүүр */
+.filters{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:22px 0 0}
+.sel{display:block;min-width:0}
+.sel span{display:block;font-size:.78rem;font-weight:600;color:var(--muted);margin:0 0 5px 2px}
+.sel select{appearance:none;-webkit-appearance:none;width:100%;font:inherit;font-weight:700;font-size:.92rem;color:var(--ink);background:var(--card) no-repeat right 12px center/12px 8px;border:1.5px solid var(--line);border-radius:12px;padding:10px 32px 10px 12px;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%235A6B62' stroke-width='2'/%3E%3C/svg%3E")}
+.sel select.on{border-color:var(--go);background-color:var(--go-soft)}
+.sel select:focus-visible{outline:3px solid var(--go);outline-offset:2px}
+.seg{display:flex;gap:3px;background:var(--off);border-radius:12px;padding:3px;margin:10px 0 4px}
+.seg button{flex:1;min-width:0;border:0;background:transparent;border-radius:9px;padding:8px 2px;font-weight:600;font-size:.86rem;color:var(--muted);line-height:1.2}
+.seg button small{display:block;font-size:.72rem;font-weight:500;opacity:.85}
+.seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+
+/* ангийн жагсаалт */
+.fh{font-weight:700;font-size:.85rem;color:var(--muted);margin:20px 2px 8px}
+.row{display:grid;grid-template-columns:5px 1fr auto;align-items:center;gap:14px;background:var(--card);border-radius:12px;padding:12px 12px 12px 0;margin-bottom:8px;min-height:68px}
+.row .bar{align-self:stretch;margin:-12px 0;border-radius:12px 0 0 12px;background:var(--go)}
+.row.short .bar{background:var(--soon)}
+.row.rep .bar{background:var(--warn)}
+.row.mine .bar{background:var(--go)}
+.row.rep .rn{opacity:.55}
+.rn{font-size:1.45rem;font-weight:800;letter-spacing:-.015em;line-height:1.1;font-variant-numeric:tabular-nums}
+.rt{font-size:.87rem;color:var(--muted);margin-top:2px}
+.rt b{font-weight:700;color:var(--go-ink)}
+.row.short .rt b{color:var(--soon-ink)}
+.tag{font-size:.8rem;font-weight:700;color:var(--warn);margin-top:3px}
+.tag.mine{color:var(--go-ink)}
+.act{border:1.5px solid var(--go);background:transparent;color:var(--go-ink);font-weight:700;font-size:.9rem;padding:10px 14px;border-radius:10px;white-space:nowrap}
+.act.fill{background:var(--go);color:var(--on-go)}
+.row.rep .act{border-color:var(--line);color:var(--muted)}
+.empty{background:var(--card);border-radius:12px;padding:16px;font-weight:500;margin-top:12px}
+.soon-list .row{grid-template-columns:5px 1fr}
+.soon-list .row .bar{background:var(--off)}
+.row{cursor:pointer}
+.busy{margin-top:18px;color:var(--muted);font-size:.86rem}
+.ratecard{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--go-soft);border-radius:12px;padding:12px 12px 12px 14px;margin-top:18px;font-weight:600;font-size:.9rem}
+.ratecard .act{background:var(--card)}
+.caveat{margin-top:14px;font-size:.84rem;color:var(--muted);padding-left:12px;border-left:3px solid var(--soon)}
+
+.note{margin-top:28px;color:var(--muted);font-size:.8rem}
+.links{display:flex;gap:18px;flex-wrap:wrap;margin-top:10px}
+.linkbtn{border:0;background:none;padding:0;font-weight:700;color:var(--go-ink);text-decoration:underline;text-underline-offset:3px}
+
+/* сонголтын цонх */
+dialog{border:0;border-radius:18px 18px 0 0;padding:0;width:100%;max-width:520px;margin:auto auto 0;background:var(--card);color:var(--ink)}
+dialog[open]{animation:up .2s ease-out}
+@keyframes up{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){dialog[open]{animation:none}}
+dialog::backdrop{background:rgba(8,18,12,.5)}
+.sheet{padding:10px 18px calc(18px + env(safe-area-inset-bottom,0px))}
+.grab{width:38px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 14px}
+.sh-h{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.sheet h2{margin:0;font-size:1.9rem;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.sheet h2.sm{font-size:1.4rem}
+.x{border:0;background:var(--off);color:var(--muted);width:34px;height:34px;border-radius:50%;font-size:1.3rem;line-height:1;flex:none}
+.lbl{font-size:.8rem;font-weight:700;color:var(--muted);margin:16px 0 7px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{border:1.5px solid var(--line);background:transparent;border-radius:10px;padding:9px 0;font-weight:700;min-width:0}
+.chips.days button{flex:1}
+.chips.hrs{display:grid;grid-template-columns:repeat(7,1fr)}
+.chips.mins{display:grid;grid-template-columns:repeat(6,1fr)}
+.chips.found{display:grid;grid-template-columns:1fr}
+.chips.found button{text-align:left;padding:12px 14px}
+.chips button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.stars{display:flex;gap:6px}
+.stars button{flex:1;border:1.5px solid var(--line);background:transparent;border-radius:12px;padding:10px 0;font-size:1.5rem;line-height:1;color:var(--off-ink)}
+.stars button.on{color:var(--soon);border-color:var(--soon);background:var(--soon-soft)}
+.scale{display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted);margin-top:5px}
+.fine{font-size:.8rem;color:var(--muted);margin:14px 0 12px}
+.ferr{color:var(--warn);font-size:.85rem;font-weight:600;margin:0 0 4px;min-height:1em}
+.state{font-weight:700;margin:4px 0 0}
+.state.free{color:var(--go-ink)}.state.short{color:var(--soon-ink)}.state.busy{color:var(--muted)}
+.tl{position:relative;height:26px;border-radius:7px;background:var(--off);overflow:hidden;margin-top:4px}
+.tl i{position:absolute;top:0;bottom:0;background:var(--go)}
+.tl b{position:absolute;top:0;bottom:0;width:3px;margin-left:-1.5px;background:var(--ink)}
+.ticks{position:relative;height:16px;font-size:.7rem;color:var(--muted);margin-top:3px}
+.ticks span{position:absolute;transform:translateX(-50%)}
+.wins{font-size:.88rem;margin:8px 0 0}
+.info p{color:var(--ink)!important;margin:0 0 10px!important;font-size:.9rem!important}
+.sheet .acts{margin-top:16px}
+.sheet p{margin:2px 0 16px;color:var(--muted);font-size:.92rem}
 .acts{display:grid;gap:8px}
-.acts button{font:inherit;font-weight:700;font-size:1rem;padding:14px;border-radius:8px;border:1.5px solid var(--navy);background:transparent;color:var(--navy);cursor:pointer;text-align:left}
-.acts button.primary{background:var(--navy);color:var(--plate)}
-.acts button.cancel{border-color:transparent;color:var(--muted);text-align:center}
-.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--wall);padding:10px 16px;border-radius:999px;font-weight:600;font-size:.9rem;opacity:0;transition:opacity .2s;pointer-events:none}
-.toast.on{opacity:1}
+.acts button{border:1.5px solid var(--line);background:transparent;border-radius:12px;padding:14px 16px;font-weight:700;font-size:1rem;text-align:left}
+.acts button.primary{background:var(--go);border-color:var(--go);color:var(--on-go)}
+.acts button.cancel{border-color:transparent;color:var(--muted);text-align:center;font-weight:600}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,8px);max-width:calc(100% - 32px);width:max-content;background:var(--ink);color:var(--paper);padding:11px 16px;border-radius:12px;font-weight:600;font-size:.9rem;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:10}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* QR пост */
 #poster{display:none}
 @media print{@page{size:A4;margin:0}body{background:#fff}main,dialog,.toast{display:none!important}#poster{display:flex!important}}
-.poster{width:210mm;height:297mm;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:#DCEBE3;color:#1A1F36;font-family:Montserrat,Arial,sans-serif;padding:18mm;box-sizing:border-box}
-.poster .card{background:#fff;padding:9mm;border-radius:4mm;width:100%}
-.poster .card .in{border:1.2mm solid #1E2A78;border-radius:2mm;padding:12mm 10mm}
-.poster h2{font-size:34pt;font-weight:800;color:#1E2A78;margin:0 0 6mm;line-height:1.1}
-.poster p{font-size:15pt;margin:0 0 9mm}
-.poster #qr{display:inline-block;padding:4mm;background:#fff}
-.poster .steps{font-size:13pt;margin-top:9mm;color:#4F5B6B}
-.poster .credit{font-size:10pt;color:#4F5B6B;margin-top:10mm}
+.poster{width:210mm;height:297mm;flex-direction:column;justify-content:space-between;background:#F2F4F1;color:#11251B;font-family:"Golos Text",Arial,sans-serif;padding:20mm 18mm;box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.poster .ph{font-size:44pt;font-weight:800;line-height:1.02;letter-spacing:-.02em;margin:0}
+.poster .pp{font-size:16pt;line-height:1.35;margin:8mm 0 0;color:#3E5248;max-width:150mm}
+.poster .pq{display:flex;align-items:center;gap:12mm;background:#fff;border-radius:6mm;padding:10mm}
+.poster #qr{flex:none;line-height:0}
+.poster .steps{font-size:15pt;line-height:1.5;font-weight:600}
+.poster .steps span{display:block;color:#0B6B3A}
+.poster .pf{display:flex;justify-content:space-between;align-items:flex-end;font-size:11pt;color:#5A6B62;border-top:1.2mm solid #11251B;padding-top:5mm}
+.poster .pf b{font-size:14pt;color:#11251B}
 </style>
 </head>
 <body>
 <main>
- <h1>Сул анги хаана байна?</h1>
- <p class="sub">C байр, 5–7-р давхрын 21 анги. Хаалга бүрийг тойрох шаардлагагүй.</p>
- <div class="banner" id="demo" hidden>Жишээ горим: Google Sheet холбогдоогүй тул товч дарсан мэдээлэл зөвхөн таны дэлгэц дээр харагдана.</div>
- <div class="days" role="group" aria-label="Гараг"></div>
- <div class="times" role="group" aria-label="Цаг">
-  <button type="button" id="nowBtn" aria-pressed="true">Одоо</button>
-  <input type="time" id="timeIn" min="07:00" max="20:30" step="600" aria-label="Цаг сонгох">
+ <div class="top">
+  <div><div class="brand">Сул анги</div><div class="place">СЭЗИС, C байр 5–7 давхар</div></div>
+  <button type="button" class="rate" id="rateBtn">Үнэлэх ☆</button>
  </div>
- <p class="status" id="status" aria-live="polite"></p>
- <p class="hint" id="hint"></p>
+ <div class="banner" id="demo" hidden>Жишээ горим: Google Sheet холбогдоогүй тул таны тэмдэглэл зөвхөн энэ дэлгэц дээр харагдана.</div>
+ <div class="banner err" id="net" hidden>Бусдын тэмдэглэлийг ачаалж чадсангүй. Хуваарь харагдсаар байна, интернэт орж ирэхэд автоматаар шинэчлэгдэнэ.</div>
+
+ <div class="when" role="group" aria-label="Цаг">
+  <button type="button" id="nowBtn"><span class="dot"></span><span id="nowTxt">Одоо</span></button>
+  <button type="button" id="pickBtn"><span id="pickTxt">Цаг сонгох</span><span class="chev"></span></button>
+ </div>
+
+ <h1 id="head" aria-live="polite"></h1>
+ <p class="lead" id="lead"></p>
+
+ <div class="bld" id="bld" aria-label="Давхар бүрийн ангиуд"></div>
+ <div class="key" aria-hidden="true">
+  <span><i class="free"></i>1+ цаг сул</span><span><i class="short"></i>1 цагаас бага</span><span><i></i>Хичээлтэй</span><span><i class="rep"></i>Хүнтэй гэж мэдээлсэн</span>
+ </div>
+
+ <div class="filters">
+  <label class="sel"><span>Хэр удаан суух вэ?</span>
+   <select id="need">
+    <option value="30">Хамаагүй</option>
+    <option value="45">45+ минут</option>
+    <option value="60">1+ цаг</option>
+    <option value="90">1.5+ цаг</option>
+    <option value="120">2+ цаг</option>
+   </select></label>
+  <label class="sel"><span>Ангийн дугаар</span><select id="roomSel"><option value="">Анги хайх</option></select></label>
+ </div>
+ <div class="seg" id="seg" role="group" aria-label="Давхар сонгох"></div>
  <div id="list"></div>
  <p class="busy" id="busy"></p>
+ <div class="ratecard" id="rateCard"><span>Суух анги олдсон уу? 10 секундэд үнэлээрэй.</span><button type="button" class="act" id="rateCardBtn">Үнэлэх</button></div>
+ <p class="caveat">Хичээлгүй байсан ч анги цоожтой эсвэл хүнтэй байж болно. Ийм анги таарвал дээр нь дарж тэмдэглээрэй.</p>
+
  <div class="note">
-  Хаалган дээрх 2026–2027 оны 1-р улирлын хуваарь болон оюутнуудын сүүлийн 90 минутын мэдээллээр гаргасан.<br>
-  ENT-221 «The Big Green Shift» оюутны туршилт.<br>
-  <button class="linkbtn" type="button" id="printBtn">QR пост хэвлэх</button>
+  ENT-221 «The Big Green Shift» оюутны туршилт.
+  <div class="links"><button class="linkbtn" type="button" id="infoBtn">Мэдээллийн тухай</button><button class="linkbtn" type="button" id="printBtn">QR пост хэвлэх</button></div>
  </div>
 </main>
 
-<dialog id="dlg" aria-labelledby="dlgTitle">
- <div class="sheet">
-  <h2 id="dlgTitle"></h2>
-  <p id="dlgSub"></p>
-  <div class="acts" id="acts"></div>
- </div>
-</dialog>
+<dialog id="dlg"><div class="sheet" id="sheet"></div></dialog>
 <div class="toast" id="toast" role="status"></div>
 
 <div id="poster" class="poster">
- <div class="card"><div class="in">
-  <h2>Багийн ажилд сул анги хайж байна уу?</h2>
-  <p>Утсаараа уншуулаад 5–7-р давхрын яг одоо сул байгаа ангийг хар. Ангид орвол «Би энд сууна» гэж дараарай.</p>
+ <div>
+  <p class="ph">Багийн ажилд сул анги хайж байна уу?</p>
+  <p class="pp">Давхар бүрээр тойрох хэрэггүй. Утсаараа уншуулаад 5–7-р давхрын яг одоо сул байгаа ангийг хар.</p>
+ </div>
+ <div class="pq">
   <div id="qr"></div>
-  <div class="steps">Камераа нээ → QR руу чиглүүл → линк дээр дар</div>
-  <div class="credit">ENT-221 «The Big Green Shift» оюутны туршилт</div>
- </div></div>
+  <div class="steps"><span>1. Камераа нээгээд QR-т чиглүүл</span><span>2. Ногоон өнгөтэй ангийг сонго</span><span>3. Ангид орвол «Сууна» дээр дар</span></div>
+ </div>
+ <div class="pf"><div><b>Сул анги</b><br>C байр, 5–7 давхар</div><div>ENT-221 «The Big Green Shift»<br>оюутны туршилт</div></div>
 </div>
 
 <script>
-// ===== ТОХИРГОО: Apps Script-ийн Web app URL-ийг энд хуулна =====
+// ===== ТОХИРГОО: Apps Script-ийн Web app URL =====
 const API_URL = "https://script.google.com/macros/s/AKfycbwgrROXNM8QFEb8ae7cVqn9w0ISFL5IRuLaPEkIVkN8VkFlEXyvDNlFpcaIPZAJAfF4/exec";
-// =================================================================
-const ROOMS={"C503": {"floor": 5, "days": [[["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"]], [["07:40", "09:30"], ["09:40", "11:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"]]]}, "C504": {"floor": 5, "days": [[["10:40", "13:30"], ["14:20", "17:10"], ["17:20", "20:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"]]]}, "C505": {"floor": 5, "days": [[], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "09:30"], ["09:40", "11:30"], ["11:40", "13:30"], ["14:20", "16:10"], ["16:20", "18:10"], ["18:20", "20:10"]], [["07:40", "10:30"], ["10:40", "13:30"]]]}, "C506": {"floor": 5, "days": [[], [["07:40", "09:30"], ["09:40", "11:30"], ["11:40", "13:30"], ["14:20", "16:10"], ["16:20", "18:10"]], [["07:40", "09:30"], ["09:40", "11:30"], ["11:40", "13:30"], ["14:20", "16:10"]], [["07:40", "09:30"], ["09:40", "11:30"], ["11:40", "13:30"], ["14:20", "16:10"]], [["07:40", "09:30"], ["09:40", "11:30"], ["11:40", "13:30"]]]}, "C507": {"floor": 5, "days": [[], [["07:40", "09:30"], ["09:40", "11:30"], ["11:40", "13:30"], ["14:20", "16:10"], ["16:20", "18:10"]], [["07:40", "09:30"], ["09:40", "11:30"], ["11:40", "13:30"], ["14:20", "16:10"]], [["07:40", "09:30"], ["09:40", "11:30"], ["11:40", "13:30"], ["14:20", "16:10"], ["16:20", "18:10"]], [["07:40", "09:30"], ["09:40", "11:30"], ["11:40", "13:30"]]]}, "C508": {"floor": 5, "days": [[], [["07:40", "10:20"], ["10:30", "13:10"], ["14:00", "16:40"]], [["07:40", "10:20"], ["14:00", "16:40"]], [["07:40", "10:20"], ["10:30", "13:10"], ["14:00", "16:40"]], [["07:40", "10:20"], ["10:30", "13:10"]]]}, "C601": {"floor": 6, "days": [[["07:40", "10:20"], ["10:30", "13:10"]], [["07:40", "10:20"], ["10:30", "13:10"], ["14:00", "16:40"]], [["07:40", "10:20"], ["10:30", "13:10"]], [["07:40", "10:20"], ["10:30", "13:10"]], []]}, "C602": {"floor": 6, "days": [[], [["07:40", "09:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "09:30"], ["09:40", "11:30"], ["11:40", "13:30"], ["14:20", "16:10"]], [["09:40", "11:30"], ["11:40", "13:30"], ["14:20", "16:10"]], [["07:40", "09:30"], ["09:40", "11:30"], ["11:40", "13:30"]]]}, "C603": {"floor": 6, "days": [[], [["07:40", "09:30"], ["10:40", "13:30"], ["14:20", "16:10"], ["16:20", "18:10"]], [["07:40", "09:30"], ["09:40", "11:30"], ["11:40", "13:30"], ["14:20", "16:10"], ["16:20", "18:10"]], [["07:40", "09:30"], ["09:40", "11:30"], ["11:40", "13:30"], ["14:20", "16:10"], ["16:20", "18:10"]], [["07:40", "09:30"], ["09:40", "11:30"], ["11:40", "13:30"]]]}, "C604": {"floor": 6, "days": [[], [["07:40", "09:30"], ["09:40", "11:30"], ["11:40", "13:30"], ["14:20", "16:10"]], [["07:40", "09:30"], ["09:40", "11:30"], ["11:40", "13:30"], ["14:20", "16:10"]], [["07:40", "09:30"], ["09:40", "11:30"], ["11:40", "13:30"], ["14:20", "16:10"], ["16:20", "18:10"]], [["07:40", "09:30"], ["09:40", "11:30"]]]}, "C605": {"floor": 6, "days": [[["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "09:30"], ["09:40", "11:30"]]]}, "C606": {"floor": 6, "days": [[], [["07:40", "09:30"], ["09:40", "11:30"], ["11:40", "13:30"], ["14:20", "16:10"]], [["07:40", "09:30"], ["09:40", "11:30"], ["11:40", "13:30"], ["14:20", "17:10"]], [["10:40", "13:30"], ["14:20", "16:10"], ["16:20", "18:10"]], [["07:40", "09:30"], ["09:40", "11:30"]]]}, "C607": {"floor": 6, "days": [[["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"]]]}, "C701": {"floor": 7, "days": [[["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"], ["17:20", "20:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"], ["17:20", "20:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"], ["17:20", "20:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]]]}, "C702": {"floor": 7, "days": [[["14:00", "17:10"]], [["10:40", "13:30"], ["14:00", "17:10"]], [["07:40", "10:23"], ["10:40", "13:30"], ["14:00", "17:10"]], [["07:40", "10:23"], ["10:40", "13:30"], ["14:00", "17:10"]], [["07:40", "10:23"], ["10:40", "13:30"]]]}, "C703": {"floor": 7, "days": [[["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"]]]}, "C704": {"floor": 7, "days": [[["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"], ["17:20", "20:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"]]]}, "C705A": {"floor": 7, "days": [[["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"]]]}, "C706": {"floor": 7, "days": [[["10:40", "13:30"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"]]]}, "C707": {"floor": 7, "days": [[["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"], ["17:20", "20:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"]]]}, "C708": {"floor": 7, "days": [[["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"], ["14:20", "17:10"]], [["07:40", "10:30"], ["10:40", "13:30"]]]}};
-const DAYS=["Даваа","Мягмар","Лхагва","Пүрэв","Баасан"], SHORT=["Да","Мя","Лх","Пү","Ба"];
-const MIN_FREE=30, END=20*60+10, TTL=90;
+// ==================================================
+const ROOMS={"C503":{"floor":5,"days":[[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"]],[["07:40","09:30"],["09:40","11:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"]]]},"C504":{"floor":5,"days":[[["10:40","13:30"],["14:20","17:10"],["17:20","20:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"]]]},"C505":{"floor":5,"days":[[],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","09:30"],["09:40","11:30"],["11:40","13:30"],["14:20","16:10"],["16:20","18:10"],["18:20","20:10"]],[["07:40","10:30"],["10:40","13:30"]]]},"C506":{"floor":5,"days":[[],[["07:40","09:30"],["09:40","11:30"],["11:40","13:30"],["14:20","16:10"],["16:20","18:10"]],[["07:40","09:30"],["09:40","11:30"],["11:40","13:30"],["14:20","16:10"]],[["07:40","09:30"],["09:40","11:30"],["11:40","13:30"],["14:20","16:10"]],[["07:40","09:30"],["09:40","11:30"],["11:40","13:30"]]]},"C507":{"floor":5,"days":[[],[["07:40","09:30"],["09:40","11:30"],["11:40","13:30"],["14:20","16:10"],["16:20","18:10"]],[["07:40","09:30"],["09:40","11:30"],["11:40","13:30"],["14:20","16:10"]],[["07:40","09:30"],["09:40","11:30"],["11:40","13:30"],["14:20","16:10"],["16:20","18:10"]],[["07:40","09:30"],["09:40","11:30"],["11:40","13:30"]]]},"C508":{"floor":5,"days":[[],[["07:40","10:20"],["10:30","13:10"],["14:00","16:40"]],[["07:40","10:20"],["14:00","16:40"]],[["07:40","10:20"],["10:30","13:10"],["14:00","16:40"]],[["07:40","10:20"],["10:30","13:10"]]]},"C601":{"floor":6,"days":[[["07:40","10:20"],["10:30","13:10"]],[["07:40","10:20"],["10:30","13:10"],["14:00","16:40"]],[["07:40","10:20"],["10:30","13:10"]],[["07:40","10:20"],["10:30","13:10"]],[]]},"C602":{"floor":6,"days":[[],[["07:40","09:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","09:30"],["09:40","11:30"],["11:40","13:30"],["14:20","16:10"]],[["09:40","11:30"],["11:40","13:30"],["14:20","16:10"]],[["07:40","09:30"],["09:40","11:30"],["11:40","13:30"]]]},"C603":{"floor":6,"days":[[],[["07:40","09:30"],["10:40","13:30"],["14:20","16:10"],["16:20","18:10"]],[["07:40","09:30"],["09:40","11:30"],["11:40","13:30"],["14:20","16:10"],["16:20","18:10"]],[["07:40","09:30"],["09:40","11:30"],["11:40","13:30"],["14:20","16:10"],["16:20","18:10"]],[["07:40","09:30"],["09:40","11:30"],["11:40","13:30"]]]},"C604":{"floor":6,"days":[[],[["07:40","09:30"],["09:40","11:30"],["11:40","13:30"],["14:20","16:10"]],[["07:40","09:30"],["09:40","11:30"],["11:40","13:30"],["14:20","16:10"]],[["07:40","09:30"],["09:40","11:30"],["11:40","13:30"],["14:20","16:10"],["16:20","18:10"]],[["07:40","09:30"],["09:40","11:30"]]]},"C605":{"floor":6,"days":[[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","09:30"],["09:40","11:30"]]]},"C606":{"floor":6,"days":[[],[["07:40","09:30"],["09:40","11:30"],["11:40","13:30"],["14:20","16:10"]],[["07:40","09:30"],["09:40","11:30"],["11:40","13:30"],["14:20","17:10"]],[["10:40","13:30"],["14:20","16:10"],["16:20","18:10"]],[["07:40","09:30"],["09:40","11:30"]]]},"C607":{"floor":6,"days":[[["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"]]]},"C701":{"floor":7,"days":[[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"],["17:20","20:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"],["17:20","20:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"],["17:20","20:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]]]},"C702":{"floor":7,"days":[[["14:00","17:10"]],[["10:40","13:30"],["14:00","17:10"]],[["07:40","10:23"],["10:40","13:30"],["14:00","17:10"]],[["07:40","10:23"],["10:40","13:30"],["14:00","17:10"]],[["07:40","10:23"],["10:40","13:30"]]]},"C703":{"floor":7,"days":[[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"]]]},"C704":{"floor":7,"days":[[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"],["17:20","20:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"]]]},"C705A":{"floor":7,"days":[[["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"]]]},"C706":{"floor":7,"days":[[["10:40","13:30"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"]]]},"C707":{"floor":7,"days":[[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"],["17:20","20:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"]]]},"C708":{"floor":7,"days":[[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"],["14:20","17:10"]],[["07:40","10:30"],["10:40","13:30"]]]}};
+const DAYS=["Даваа","Мягмар","Лхагва","Пүрэв","Баасан"],SHORT=["Да","Мя","Лх","Пү","Ба"];
+const MIN_FREE=30,START=7*60+40,END=20*60+10,LAST=19*60+40,TTL=90;
 const LABEL={sitting:"Хүн сууж байна",busy:"Хүнтэй гэж мэдээлсэн",locked:"Цоожтой гэж мэдээлсэн"};
+const NEED={45:"45+ минут",60:"1+ цаг",90:"1.5+ цаг",120:"2+ цаг"};
 const toM=s=>{const[h,m]=s.split(":").map(Number);return h*60+m};
 const toS=m=>String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0");
-const demo=!API_URL; document.getElementById("demo").hidden=!demo;
+const dur=m=>{const h=Math.floor(m/60),r=m%60;return[h?h+" цаг":"",r?r+" мин":""].filter(Boolean).join(" ")||"0 мин"};
+const nice=n=>n.replace("C","C-");
+const nowMin=()=>{const n=new Date();return n.getHours()*60+n.getMinutes()};
+const $=id=>document.getElementById(id);
+const demo=!API_URL;$("demo").hidden=!demo;
+const ls={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
 
-let dev="";try{dev=localStorage.getItem("sa_dev")||"";if(!dev){dev=Math.random().toString(36).slice(2,10);localStorage.setItem("sa_dev",dev)}}catch(e){dev=Math.random().toString(36).slice(2,10)}
+let dev=ls.get("sa_dev");if(!dev){dev=Math.random().toString(36).slice(2,10);ls.set("sa_dev",dev)}
+const qs=new URLSearchParams(location.search);
+const SRC=(qs.get("src")==="qr"||qs.get("from")==="qr")?"qr":"web";
+const todayKey=()=>new Date().toISOString().slice(0,10);
 
-const now0=new Date(), wd=now0.getDay(), weekend=!(wd>=1&&wd<=5);
-const today=weekend?0:wd-1;
-let day=today, useNow=true, chosen=now0.getHours()*60+now0.getMinutes();
-let reports=[]; // {t, room, status, dev}
+const wd=new Date().getDay(),weekend=!(wd>=1&&wd<=5),today=weekend?0:wd-1;
+let day=today,useNow=true,chosen=nowMin(),floorF=0,need=+(ls.get("sa_need")||30),reports=[],netFail=false;
+if(!NEED[need])need=30;
 
-const daysEl=document.querySelector(".days");
-DAYS.forEach((d,i)=>{const b=document.createElement("button");b.type="button";b.textContent=SHORT[i];b.setAttribute("aria-label",d);
- b.onclick=()=>{day=i;useNow=false;render()};daysEl.appendChild(b)});
-const timeIn=document.getElementById("timeIn"), nowBtn=document.getElementById("nowBtn");
-timeIn.value=toS(chosen);
-timeIn.oninput=()=>{if(!timeIn.value)return;useNow=false;chosen=toM(timeIn.value);render()};
-nowBtn.onclick=()=>{useNow=true;day=today;const n=new Date();chosen=n.getHours()*60+n.getMinutes();timeIn.value=toS(chosen);render()};
-
+// хуваарь: сул бол хэдэн цаг хүртэл, хичээлтэй бол хэзээ сулрах
 function sched(iv,T){
- for(const[a,b]of iv){if(toM(a)<=T&&T<toM(b))return{busy:true}}
- let next=END;for(const[a]of iv){const s=toM(a);if(s>T&&s<next)next=s}
+ const ivs=iv.map(([a,b])=>[toM(a),toM(b)]).sort((x,y)=>x[0]-y[0]);
+ const cur=ivs.find(([a,b])=>a<=T&&T<b);
+ if(cur){let end=cur[1];for(const[a,b]of ivs){if(a>=end&&a-end<MIN_FREE)end=Math.max(end,b)}return{busy:true,freeAt:end}}
+ let next=END;for(const[a]of ivs){if(a>T&&a<next)next=a}
  return{busy:false,until:next};
 }
-// хамгийн сүүлийн хүчинтэй мэдээлэл: 90 минутаас хуучин биш, дундуур нь хичээл эхлээгүй
+// өдрийн 30+ минутын сул цонхнууд
+function windows(iv){
+ const ivs=iv.map(([a,b])=>[toM(a),toM(b)]).sort((x,y)=>x[0]-y[0]);
+ const w=[];let cur=START;
+ for(const[a,b]of ivs){if(a-cur>=MIN_FREE)w.push([cur,a]);cur=Math.max(cur,b)}
+ if(END-cur>=MIN_FREE)w.push([cur,END]);return w;
+}
+// хамгийн сүүлийн хүчинтэй тэмдэглэл: 90 минутаас хуучин биш, дундуур нь хичээл эхлээгүй
 function latest(room){
- if(!(useNow&&day===today&&!weekend))return null;
- const n=Date.now(), T=new Date().getHours()*60+new Date().getMinutes();
+ const n=Date.now(),T=nowMin();
  const rs=reports.filter(r=>r.room===room&&n-r.t<TTL*60000).sort((a,b)=>b.t-a.t);
  if(!rs.length||rs[0].status==="left")return null;
- const r=rs[0], d=new Date(r.t), rm=d.getHours()*60+d.getMinutes();
+ const r=rs[0],d=new Date(r.t),rm=d.getHours()*60+d.getMinutes();
  if(ROOMS[room].days[day].some(([a])=>{const s=toM(a);return s>rm&&s<=T}))return null;
  return r;
 }
-function ago(t){const m=Math.max(0,Math.round((Date.now()-t)/60000));return m<1?"дөнгөж сая":m+" мин өмнө"}
+const ago=t=>{const m=Math.max(0,Math.round((Date.now()-t)/60000));return m<1?"дөнгөж сая":m+" мин өмнө"};
+const isLive=()=>useNow&&day===today&&!weekend;
 
+function snapshot(){
+ const T=chosen,live=isLive(),out=T<START||T>LAST;
+ return Object.entries(ROOMS).map(([name,r])=>{
+  const s=sched(r.days[day],T),ok=!out&&!s.busy&&s.until-T>=MIN_FREE;
+  const rep=ok&&live?latest(name):null;
+  const mine=!!(rep&&rep.dev===dev&&rep.status==="sitting");
+  const len=ok?s.until-T:0;
+  return{name,floor:r.floor,s,ok,len,fit:ok&&len>=need,rep,mine,out};
+ });
+}
+function cellClass(x){if(!x.ok)return"cell";let c="cell "+(x.mine?"mine":x.rep?"rep":x.len<60?"short":"free");if(!x.fit&&!x.mine)c+=" dim";return c}
+const untilTxt=x=>x.s.until>=END?"Орой хүртэл сул":toS(x.s.until)+" хүртэл сул";
+function stateOf(x){
+ if(x.out)return["busy","Хичээлийн цагаас гадуур"];
+ if(x.s.busy)return["busy",x.s.freeAt>=LAST?"Орой хүртэл хичээлтэй":toS(x.s.freeAt)+" хүртэл хичээлтэй"];
+ if(!x.ok)return["busy",toS(x.s.until)+"-д хичээл эхэлнэ"];
+ return[x.len<60?"short":"free",untilTxt(x)+(x.s.until>=END?"":", "+dur(x.len)+" үлдсэн")];
+}
+
+const bld=$("bld"),seg=$("seg"),list=$("list");
 function render(){
- [...daysEl.children].forEach((b,i)=>b.setAttribute("aria-pressed",i===day));
- nowBtn.setAttribute("aria-pressed",useNow);
- const T=chosen, list=document.getElementById("list"), st=document.getElementById("status"), busyEl=document.getElementById("busy"), hint=document.getElementById("hint");
- list.innerHTML="";busyEl.textContent="";
- const live=useNow&&day===today&&!weekend;
- hint.textContent=live?"Ангид орвол дээр нь дарж «Би энд сууна» гэж мэдээлээрэй. Бусад оюутнууд дэмий очихгүй.":"Оюутнуудын мэдээлэл зөвхөн «Одоо» горимд харагдана.";
- const label=DAYS[day]+", "+toS(T);
- if(T<7*60+40||T>=END-MIN_FREE){st.textContent=label+": хичээлийн цагаас гадуур байна. 07:40–19:40 хооронд цаг сонгоно уу.";return}
- const free=[];let busy=0,rep=0;
- for(const[name,r]of Object.entries(ROOMS)){const s=sched(r.days[day],T);
-  if(s.busy||s.until-T<MIN_FREE){busy++;continue}
-  const L=latest(name);if(L)rep++;
-  free.push({name,floor:r.floor,until:s.until,len:s.until-T,rep:L})}
- const open=free.length-rep;
- st.textContent=(weekend&&useNow?"Өнөөдөр амралтын өдөр, Даваа гарагийг харуулж байна. ":"")+label+": "+(open?open+" анги сул":"сул анги алга")+(rep?" ("+rep+" анги хүнтэй гэж мэдээлэгдсэн)":"");
- if(!free.length){list.innerHTML='<div class="empty">Энэ цагт бүх анги хичээлтэй эсвэл удахгүй хичээл эхэлнэ. Өөр цаг сонгоод үзээрэй.</div>';return}
- [5,6,7].forEach(f=>{const rows=free.filter(x=>x.floor===f).sort((a,b)=>(!!a.rep-!!b.rep)||(b.len-a.len));if(!rows.length)return;
-  const h=document.createElement("div");h.className="floor";h.textContent=f+"-р давхар";list.appendChild(h);
-  const g=document.createElement("div");g.className="grid";
-  rows.forEach(x=>{const p=document.createElement("button");p.type="button";p.className="plate"+(x.rep?" reported":"");p.disabled=!live;
-   const txt=x.until>=END?"Орой хүртэл сул":toS(x.until)+" хүртэл сул";
-   let tag="";if(x.rep){const mine=x.rep.dev===dev&&x.rep.status==="sitting";tag='<div class="tag'+(mine?' mine':'')+'">'+(mine?"Та энд сууж байна":LABEL[x.rep.status])+" · "+ago(x.rep.t)+'</div>'}
-   p.innerHTML='<div class="in"><div class="num">'+x.name.replace("C","C-")+'</div><div class="until'+(x.len<60?' short':'')+'">'+txt+'</div>'+tag+'</div>';
-   p.setAttribute("aria-label",x.name+", "+txt+(x.rep?", "+LABEL[x.rep.status]:""));
-   if(live)p.onclick=()=>openSheet(x);g.appendChild(p)});
-  list.appendChild(g)});
- busyEl.textContent="Бусад "+busy+" анги хичээлтэй эсвэл 30 минутын дотор хичээл эхэлнэ.";
+ const T=chosen,live=isLive(),rooms=snapshot(),out=rooms[0].out;
+ const free=rooms.filter(x=>x.ok),open=free.filter(x=>!x.rep&&x.fit),me=free.find(x=>x.mine);
+ const repN=free.filter(x=>x.rep&&!x.mine).length;
+
+ // цагийн товч
+ $("nowBtn").setAttribute("aria-pressed",useNow);$("pickBtn").setAttribute("aria-pressed",!useNow);
+ $("nowTxt").textContent=useNow?"Одоо "+toS(nowMin()):"Одоо";
+ $("pickTxt").textContent=useNow?"Цаг сонгох":SHORT[day]+" "+toS(T);
+
+ // гарчиг
+ const head=$("head"),lead=$("lead");
+ const when=live?"Яг одоо":DAYS[day]+" "+toS(T)+"-д";
+ if(out){head.textContent="Хичээлийн цагаас гадуур";lead.textContent="07:40–19:40 хооронд ангиудын хуваарийг харуулна. «Цаг сонгох» дээр дарж өөр цаг үзээрэй."}
+ else{
+  head.textContent=open.length?when+" "+open.length+" анги "+(NEED[need]?NEED[need]+" ":"")+"сул":when+" "+(NEED[need]?NEED[need]+" ":"")+"сул анги алга";
+  let t=weekend&&useNow?"Өнөөдөр амралтын өдөр тул Даваа гарагийн хуваарийг харуулж байна. ":"";
+  if(me)t+="Та "+nice(me.name)+"-д сууж байна. ";
+  if(repN)t+="Өөр "+repN+" анги хуваарийн дагуу сул ч хүнтэй гэж мэдээлэгдсэн. ";
+  t+=live?"Анги дээр дарж хуваарийг нь харах, «Сууна» гэж тэмдэглэх боломжтой.":"Оюутнуудын тэмдэглэл зөвхөн одоогийн цагт харагдана.";
+  lead.textContent=t;
+ }
+
+ // барилгын зүсэлт
+ bld.innerHTML='<div class="roof"></div>';
+ [7,6,5].forEach(f=>{
+  const fl=document.createElement("div");fl.className="fl";fl.innerHTML='<b aria-hidden="true">'+f+'</b>';
+  const c=document.createElement("div");c.className="cells";
+  rooms.filter(x=>x.floor===f).sort((a,b)=>a.name.localeCompare(b.name)).forEach(x=>{
+   const b=document.createElement("button");b.type="button";b.className=cellClass(x);
+   b.textContent=x.name.slice(1);b.setAttribute("aria-label",nice(x.name)+": "+stateOf(x)[1]+(x.rep?", "+LABEL[x.rep.status]:""));
+   b.onclick=()=>roomSheet(x.name);c.appendChild(b)});
+  fl.appendChild(c);bld.appendChild(fl)});
+
+ // давхрын шүүлтүүр
+ seg.innerHTML="";
+ [[0,"Бүгд"],[5,"5 давхар"],[6,"6 давхар"],[7,"7 давхар"]].forEach(([f,l])=>{
+  const n=open.filter(x=>!f||x.floor===f).length;
+  const b=document.createElement("button");b.type="button";b.setAttribute("aria-pressed",floorF===f);
+  b.innerHTML=l+"<small>"+(out?"–":n+" сул")+"</small>";b.onclick=()=>{floorF=f;render()};seg.appendChild(b)});
+ $("need").classList.toggle("on",need>MIN_FREE);
+
+ // жагсаалт
+ list.innerHTML="";const busyEl=$("busy");busyEl.textContent="";
+ $("rateCard").hidden=ls.get("sa_rated")===todayKey();
+ if(out)return;
+ const shown=free.filter(x=>(x.fit||x.mine)&&(!floorF||x.floor===floorF));
+ if(!shown.length){
+  const e=document.createElement("div");e.className="empty";
+  e.textContent=(floorF?floorF+"-р давхарт":"Энэ цагт")+" "+(NEED[need]?NEED[need]+" ":"")+"сул анги алга."+(need>MIN_FREE?" «Хэр удаан суух вэ?»-г багасгаад үзээрэй.":floorF?" Бусад давхрыг шалгаарай.":"");
+  list.appendChild(e);
+ }
+ [5,6,7].forEach(f=>{
+  const rows=shown.filter(x=>x.floor===f).sort((a,b)=>(!!a.rep-!!b.rep)||(b.len-a.len));if(!rows.length)return;
+  if(!floorF){const h=document.createElement("div");h.className="fh";h.textContent=f+"-р давхар";list.appendChild(h)}
+  rows.forEach(x=>{
+   const r=document.createElement("div");r.className="row"+(x.mine?" mine":x.rep?" rep":x.len<60?" short":"");
+   let tag="";if(x.rep)tag='<div class="tag'+(x.mine?' mine':'')+'">'+(x.mine?"Та энд сууж байна":LABEL[x.rep.status])+", "+ago(x.rep.t)+"</div>";
+   const left=x.s.until>=END?"":", "+dur(x.len)+" үлдсэн";
+   r.innerHTML='<span class="bar"></span><div><div class="rn">'+nice(x.name)+'</div><div class="rt"><b>'+untilTxt(x)+'</b>'+left+'</div>'+tag+'</div>';
+   r.onclick=()=>roomSheet(x.name);
+   if(live){const a=document.createElement("button");a.type="button";a.className="act"+(x.mine?" fill":"");a.textContent=x.mine?"Гарлаа":"Сууна";
+    a.setAttribute("aria-label",nice(x.name)+": "+a.textContent);a.onclick=e=>{e.stopPropagation();roomSheet(x.name)};r.appendChild(a)}
+   list.appendChild(r)})});
+
+ // сул анги цөөн үед: удахгүй сулрах ангиуд
+ if(open.length<=3){
+  const up=rooms.filter(x=>x.s.busy&&x.s.freeAt<=LAST&&(!floorF||x.floor===floorF)).map(x=>{const n=sched(ROOMS[x.name].days[day],x.s.freeAt);return{...x,at:x.s.freeAt,to:n.busy?x.s.freeAt:n.until}})
+   .filter(x=>x.to-x.at>=need).sort((a,b)=>a.at-b.at).slice(0,3);
+  if(up.length){
+   const h=document.createElement("div");h.className="fh";h.textContent="Удахгүй сулрах";list.appendChild(h);
+   const w=document.createElement("div");w.className="soon-list";
+   up.forEach(x=>{const r=document.createElement("div");r.className="row";r.onclick=()=>roomSheet(x.name);
+    r.innerHTML='<span class="bar"></span><div><div class="rn">'+nice(x.name)+'</div><div class="rt"><b style="color:var(--ink)">'+toS(x.at)+'-д сулрана</b>, '+(x.to>=END?"орой хүртэл сул":toS(x.to)+" хүртэл сул")+"</div></div>";w.appendChild(r)});
+   list.appendChild(w);
+  }
+ }
+ const busyN=rooms.length-free.length;
+ if(busyN)busyEl.textContent="Бусад "+busyN+" анги хичээлтэй эсвэл 30 минутын дотор хичээл эхэлнэ. Саарал анги дээр дарж хэзээ сулрахыг хараарай.";
 }
 
-const dlg=document.getElementById("dlg");
-function openSheet(x){
- document.getElementById("dlgTitle").textContent=x.name.replace("C","C-");
- document.getElementById("dlgSub").textContent=(x.until>=END?"Хуваарийн дагуу орой хүртэл сул":"Хуваарийн дагуу "+toS(x.until)+" хүртэл сул")+". Юу харсан бэ?";
- const acts=document.getElementById("acts");acts.innerHTML="";
- const mine=x.rep&&x.rep.dev===dev&&x.rep.status==="sitting";
- const add=(txt,status,cls)=>{const b=document.createElement("button");b.type="button";b.textContent=txt;if(cls)b.className=cls;b.onclick=()=>{dlg.close();if(status)send(x.name,status)};acts.appendChild(b)};
- if(mine)add("Би гарлаа","left","primary");
- else{add("Би энд сууна","sitting","primary");add("Хүнтэй байна","busy");add("Цоожтой байна","locked")}
- add("Болих",null,"cancel");
- dlg.showModal();
+// ---------- доороос гарах цонх ----------
+const dlg=$("dlg"),sheet=$("sheet");
+function openDlg(title,cls){
+ sheet.innerHTML='<div class="grab"></div><div class="sh-h"><h2 class="'+(cls||"")+'"></h2><button type="button" class="x" aria-label="Хаах">×</button></div>';
+ sheet.querySelector("h2").textContent=title;sheet.querySelector(".x").onclick=()=>dlg.close();
+ if(!dlg.open)dlg.showModal();return sheet;
 }
-function toast(t){const el=document.getElementById("toast");el.textContent=t;el.classList.add("on");setTimeout(()=>el.classList.remove("on"),2200)}
-const DONE={sitting:"Бүртгэгдлээ. Гарахдаа «Би гарлаа» гэж дараарай.",busy:"Баярлалаа, бусдад анхааруулга харагдана.",locked:"Баярлалаа, бусдад анхааруулга харагдана.",left:"Гарсныг бүртгэлээ, анги дахин сул харагдана."};
+dlg.addEventListener("click",e=>{if(e.target===dlg)dlg.close()});
+const el=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e};
+const btn=(txt,cls,fn)=>{const b=el("button",cls,txt);b.type="button";b.onclick=fn;return b};
+
+// анги: өнөөдрийн хуваарь + тэмдэглэх
+function roomSheet(name){
+ const x=snapshot().find(r=>r.name===name),live=isLive(),[sc,st]=stateOf(x);
+ const s=openDlg(nice(name));
+ s.appendChild(el("p","state "+sc,(live?"Одоо: ":DAYS[day]+" "+toS(chosen)+": ")+st));
+ if(x.rep)s.appendChild(el("div","tag"+(x.mine?" mine":""),(x.mine?"Та энд сууж байна":LABEL[x.rep.status])+", "+ago(x.rep.t)));
+ s.appendChild(el("div","lbl",DAYS[day]+" гарагийн хуваарь"));
+ const span=END-START,pct=m=>((m-START)/span*100).toFixed(2)+"%",w=windows(ROOMS[name].days[day]);
+ const tl=el("div","tl");w.forEach(([a,b])=>{const i=el("i");i.style.left=pct(a);i.style.width=((b-a)/span*100).toFixed(2)+"%";tl.appendChild(i)});
+ if(!x.out){const m=el("b");m.style.left=pct(chosen);tl.appendChild(m)}
+ const tk=el("div","ticks");[8,10,12,14,16,18,20].forEach(h=>{const sp=el("span",null,String(h));sp.style.left=pct(h*60);tk.appendChild(sp)});
+ s.appendChild(tl);s.appendChild(tk);
+ const wn=el("p","wins");wn.innerHTML="<b>Сул цаг:</b> ";wn.appendChild(document.createTextNode(w.length?w.map(([a,b])=>toS(a)+"–"+toS(b)).join(", "):"энэ өдөр 30+ минут сул цаг алга"));s.appendChild(wn);
+ if(live&&x.ok){
+  const acts=el("div","acts");
+  const go=st=>()=>{dlg.close();send(name,st)};
+  if(x.mine)acts.appendChild(btn("Би гарлаа","primary",go("left")));
+  else{acts.appendChild(btn("Би энд сууна","primary",go("sitting")));acts.appendChild(btn("Хүнтэй байна",null,go("busy")));acts.appendChild(btn("Цоожтой байна",null,go("locked")))}
+  s.appendChild(acts);
+ }
+}
+
+// цаг сонгох
+function timeSheet(){
+ let d=day,h=Math.min(19,Math.max(7,Math.floor(chosen/60))),m=Math.min(50,Math.round((chosen%60)/10)*10);
+ const s=openDlg("Цаг сонгох","sm");
+ const mk=(label,cls,items,get,setv)=>{s.appendChild(el("div","lbl",label));const c=el("div","chips "+cls);
+  items.forEach(([v,t])=>{const b=btn(t,null,()=>{setv(v);[...c.children].forEach((x,i)=>x.setAttribute("aria-pressed",items[i][0]===get()))});b.setAttribute("aria-pressed",v===get());c.appendChild(b)});s.appendChild(c)};
+ mk("Гараг","days",DAYS.map((x,i)=>[i,SHORT[i]]),()=>d,v=>d=v);
+ mk("Цаг","hrs",Array.from({length:13},(_,i)=>[i+7,String(i+7).padStart(2,"0")]),()=>h,v=>h=v);
+ mk("Минут","mins",[0,10,20,30,40,50].map(v=>[v,":"+String(v).padStart(2,"0")]),()=>m,v=>m=v);
+ const acts=el("div","acts");
+ acts.appendChild(btn("Сонгох","primary",()=>{chosen=Math.min(LAST,Math.max(START,h*60+m));day=d;useNow=false;dlg.close();render();window.scrollTo({top:0,behavior:"smooth"})}));
+ if(!useNow)acts.appendChild(btn("Одоо руу буцах",null,()=>{dlg.close();goNow()}));
+ s.appendChild(acts);
+}
+function goNow(){useNow=true;day=today;chosen=nowMin();render()}
+
+// үнэлгээ
+const FOUND={yes:"Тийм, олдсон",no:"Үгүй, олдоогүй",look:"Зөвхөн харж байна"};
+function rateSheet(){
+ let stars=0,found="";
+ const s=openDlg("Хэрэгтэй байв уу?","sm");
+ s.appendChild(el("div","lbl","Аппыг үнэлээрэй"));
+ const st=el("div","stars");
+ for(let i=1;i<=5;i++){const b=btn("★",null,()=>{stars=i;paint();err.textContent=""});b.setAttribute("aria-label",i+" од");st.appendChild(b)}
+ const paint=()=>[...st.children].forEach((b,i)=>{b.classList.toggle("on",i<stars);b.setAttribute("aria-pressed",i<stars)});
+ s.appendChild(st);const sc=el("div","scale");sc.appendChild(el("span",null,"1 — Тааруу"));sc.appendChild(el("span",null,"5 — Маш сайн"));s.appendChild(sc);
+ s.appendChild(el("div","lbl","Суух анги олдсон уу?"));
+ const fc=el("div","chips found");
+ Object.entries(FOUND).forEach(([k,t])=>{const b=btn(t,null,()=>{found=k;[...fc.children].forEach(x=>x.setAttribute("aria-pressed",x===b));err.textContent=""});b.setAttribute("aria-pressed",false);fc.appendChild(b)});
+ s.appendChild(fc);
+ s.appendChild(el("p","fine","Нэр, утасны дугаар авахгүй."));
+ const err=el("p","ferr","");
+ const acts=el("div","acts");
+ acts.appendChild(btn("Үнэлгээ илгээх","primary",async e=>{
+  if(!stars){err.textContent="Од сонгоно уу.";return}
+  if(!found){err.textContent="Анги олдсон эсэхийг сонгоно уу.";return}
+  const b=e.currentTarget;b.disabled=true;b.textContent="Илгээж байна…";
+  const ok=await post({room:SRC,status:"rate",stars,found,dev});
+  if(ok){ls.set("sa_rated",todayKey());dlg.close();rateState();render();toast("Баярлалаа. Үнэлгээ илгээгдлээ.")}
+  else{b.disabled=false;b.textContent="Үнэлгээ илгээх";err.textContent="Илгээж чадсангүй. Интернэтээ шалгаад дахин дарна уу."}
+ }));
+ s.appendChild(err);s.appendChild(acts);
+}
+function rateState(){const done=ls.get("sa_rated")===todayKey();const b=$("rateBtn");b.textContent=done?"Үнэлсэн ★":"Үнэлэх ☆";b.classList.toggle("done",done)}
+
+// мэдээллийн тухай
+function infoSheet(){
+ const s=openDlg("Мэдээллийн тухай","sm");const w=el("div","info");
+ ["Хуваарь: C байрны 5–7-р давхрын 21 ангийн хаалган дээрх 2026–2027 оны 1-р улирлын хуваарь. Хуваарь өөрчлөгдвөл бодит байдал зөрж болно.",
+  "Ногоон анги 1-ээс дээш цаг, шар анги 1 цагаас бага хугацаанд сул. 30 минутаас бага сул ангийг харуулахгүй.",
+  "«Сууна», «Хүнтэй», «Цоожтой» гэсэн тэмдэглэл бусдад 90 минут харагдаад, эсвэл хуваарийн дагуу хичээл эхлэхэд автоматаар арилна.",
+  "Нэр, утасны дугаар цуглуулахгүй. Хуудас нээгдсэн, товч дарсан цаг болон нэргүй төхөөрөмжийн кодыг л туршилтын хэмжилтэд ашиглана.",
+  "ENT-221 «The Big Green Shift» хичээлийн оюутны туршилт."].forEach(t=>w.appendChild(el("p",null,t)));
+ s.appendChild(w);
+}
+
+let tt;function toast(t){const e=$("toast");e.textContent=t;e.classList.add("on");clearTimeout(tt);tt=setTimeout(()=>e.classList.remove("on"),2600)}
+async function post(data){
+ if(demo)return true;
+ try{const res=await fetch(API_URL,{method:"POST",body:JSON.stringify(data)});let j=null;try{j=await res.json()}catch(e){}return!(j&&j.ok===false)}
+ catch(e){return false}
+}
+const DONE={sitting:"Тэмдэглэлээ. Гарахдаа «Гарлаа» дээр дараарай.",busy:"Баярлалаа. Бусдад анхааруулга харагдана.",locked:"Баярлалаа. Бусдад анхааруулга харагдана.",left:"Гарсныг тэмдэглэлээ. Анги дахин сул харагдана."};
 async function send(room,status){
- const r={t:Date.now(),room,status,dev};
- reports.push(r);render();
- if(demo){toast(DONE[status]);return}
- try{await fetch(API_URL,{method:"POST",body:JSON.stringify({room,status,dev})});toast(DONE[status]);load()}
- catch(e){toast("Илгээж чадсангүй. Интернэтээ шалгаад дахин оролдоно уу.")}
+ const r={t:Date.now(),room,status,dev};reports.push(r);render();
+ if(await post({room,status,dev})){toast(DONE[status]);load()}
+ else{reports=reports.filter(x=>x!==r);render();toast("Тэмдэглэгдсэнгүй. Интернэтээ шалгаад дахин дарна уу.")}
 }
 async function load(){
  if(demo)return;
- try{const res=await fetch(API_URL+"?t="+Date.now());const j=await res.json();if(j&&j.ok)reports=j.items;render()}catch(e){}
+ try{const res=await fetch(API_URL+"?t="+Date.now());const j=await res.json();if(j&&j.ok)reports=j.items;netFail=false}catch(e){netFail=true}
+ $("net").hidden=!netFail;render();
 }
-render();load();
-setInterval(()=>{if(useNow){const n=new Date();chosen=n.getHours()*60+n.getMinutes();timeIn.value=toS(chosen)}load();render()},60000);
+
+// холболтууд
+const roomSel=$("roomSel");
+Object.keys(ROOMS).sort().forEach(n=>{const o=el("option",null,nice(n));o.value=n;roomSel.appendChild(o)});
+roomSel.onchange=()=>{const v=roomSel.value;roomSel.value="";if(v)roomSheet(v)};
+const needSel=$("need");needSel.value=String(need);
+needSel.onchange=()=>{need=+needSel.value;ls.set("sa_need",need);render()};
+$("nowBtn").onclick=goNow;$("pickBtn").onclick=timeSheet;
+$("rateBtn").onclick=rateSheet;$("rateCardBtn").onclick=rateSheet;$("infoBtn").onclick=infoSheet;
+
+rateState();render();load();
+// хуудас нээгдсэнийг нэг удаа бүртгэнэ (QR-аас эсвэл шууд линкээр)
+try{if(!sessionStorage.getItem("sa_v")){sessionStorage.setItem("sa_v","1");if(!demo)post({room:SRC,status:"open",dev})}}catch(e){}
+try{if(location.search)history.replaceState(null,"",location.pathname)}catch(e){}
+setInterval(()=>{if(useNow)chosen=nowMin();load();render()},60000);
 
 let qrDone=false;
-document.getElementById("printBtn").onclick=()=>{
- if(!qrDone&&window.QRCode){new QRCode(document.getElementById("qr"),{text:location.href.split("?")[0],width:260,height:260,colorDark:"#1E2A78",colorLight:"#ffffff"});qrDone=true}
+$("printBtn").onclick=()=>{
+ if(!qrDone&&window.QRCode){new QRCode($("qr"),{text:location.origin+location.pathname+"?src=qr",width:250,height:250,colorDark:"#11251B",colorLight:"#ffffff"});qrDone=true}
  setTimeout(()=>window.print(),300);
 };
 </script>
