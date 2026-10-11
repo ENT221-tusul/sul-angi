@@ -83,7 +83,7 @@ h1{font-size:2.15rem;line-height:1.06;font-weight:800;letter-spacing:-.025em;mar
 .key i.free{background:var(--go)}.key i.short{background:var(--soon)}.key i.rep{background:transparent;box-shadow:inset 0 0 0 2px var(--warn)}
 
 /* шүүлтүүр */
-.flt{margin:22px 0 0;background:var(--card);border:1.5px solid var(--line);border-radius:12px}
+.flt{margin:16px 0 0;background:var(--card);border:1.5px solid var(--line);border-radius:12px}
 .flt summary{list-style:none;display:flex;align-items:center;gap:8px;padding:11px 14px;font-weight:700;font-size:.92rem;cursor:pointer}
 .flt summary::-webkit-details-marker{display:none}
 .flt summary>span:first-child{flex:1}
@@ -211,10 +211,6 @@ dialog::backdrop{background:rgba(8,18,12,.5)}
  <h1 id="head" aria-live="polite"></h1>
  <p class="lead" id="lead"></p>
 
- <div class="bld" id="bld" aria-label="Давхар бүрийн ангиуд"></div>
- <div class="key" aria-hidden="true">
-  <span><i class="free"></i>1+ цаг сул</span><span><i class="short"></i>1 цагаас бага</span><span><i></i>Хичээлтэй</span><span><i class="rep"></i>Хүнтэй гэж мэдээлсэн</span>
- </div>
 
  <details class="flt" id="flt">
   <summary><span>Шүүлтүүр</span><span class="fon" id="fon"></span><span class="chev"></span></summary>
@@ -330,7 +326,7 @@ function stateOf(x){
  return[x.len<60?"short":"free",untilTxt(x)+(x.s.until>=END?"":", "+dur(x.len)+" үлдсэн")];
 }
 
-const bld=$("bld"),seg=$("seg"),list=$("list");
+const seg=$("seg"),list=$("list");
 function render(){
  const T=chosen,live=isLive(),rooms=snapshot(),out=rooms[0].out;
  const free=rooms.filter(x=>x.ok),open=free.filter(x=>!x.rep&&x.fit),me=free.find(x=>x.mine);
@@ -351,20 +347,9 @@ function render(){
   let t=weekend&&useNow?"Өнөөдөр амралтын өдөр тул Даваа гарагийн хуваарийг харуулж байна. ":"";
   if(me)t+="Та "+nice(me.name)+"-д сууж байна. ";
   if(repN)t+="Өөр "+repN+" анги хуваарийн дагуу сул ч хүнтэй гэж мэдээлэгдсэн. ";
-  t+=live?"Анги дээр дарж хуваарийг нь харах, «Сууна» гэж тэмдэглэх боломжтой.":"Оюутнуудын тэмдэглэл зөвхөн одоогийн цагт харагдана.";
+  t+=live?"Ангид орвол «Сууна» дээр дарж бусдад мэдэгдээрэй.":"Оюутнуудын тэмдэглэл зөвхөн одоогийн цагт харагдана.";
   lead.textContent=t;
  }
-
- // барилгын зүсэлт
- bld.innerHTML='<div class="roof"></div>';
- [7,6,5].forEach(f=>{
-  const fl=document.createElement("div");fl.className="fl";fl.innerHTML='<b aria-hidden="true">'+f+'</b>';
-  const c=document.createElement("div");c.className="cells";
-  rooms.filter(x=>x.floor===f).sort((a,b)=>a.name.localeCompare(b.name)).forEach(x=>{
-   const b=document.createElement("button");b.type="button";b.className=cellClass(x);
-   b.textContent=x.name.slice(1);b.setAttribute("aria-label",nice(x.name)+": "+stateOf(x)[1]+(x.rep?", "+LABEL[x.rep.status]:""));
-   b.onclick=()=>roomSheet(x.name);c.appendChild(b)});
-  fl.appendChild(c);bld.appendChild(fl)});
 
  // давхрын шүүлтүүр
  seg.innerHTML="";
@@ -410,7 +395,7 @@ function render(){
   }
  }
  const busyN=rooms.length-free.length;
- if(busyN)busyEl.textContent="Бусад "+busyN+" анги хичээлтэй эсвэл 30 минутын дотор хичээл эхэлнэ. Саарал анги дээр дарж хэзээ сулрахыг хараарай.";
+ if(busyN)busyEl.textContent="Бусад "+busyN+" анги хичээлтэй эсвэл 30 минутын дотор хичээл эхэлнэ. Аль нэг ангийн хуваарийг Шүүлтүүр → Ангийн дугаараас харж болно.";
 }
 
 // ---------- доороос гарах цонх ----------
