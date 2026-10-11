@@ -10,7 +10,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 :root{
  --paper:#F2F4F1;--card:#FFFFFF;--ink:#11251B;--muted:#5A6B62;--line:#DCE3DE;
@@ -213,7 +212,12 @@ dialog{max-height:92vh;overflow-y:auto}
 .ticks{position:relative;height:16px;font-size:.7rem;color:var(--muted);margin-top:3px}
 .ticks span{position:absolute;transform:translateX(-50%)}
 .wins{font-size:.88rem;margin:8px 0 0}
-.info p{color:var(--ink)!important;margin:0 0 10px!important;font-size:.9rem!important}
+.info p{margin:0 0 10px!important}
+.sheet .lead1{color:var(--ink);font-size:.95rem;font-weight:500;margin:6px 0 12px}
+.sheet .mut{color:var(--muted);font-size:.9rem;margin:0 0 10px}
+.sheet .mut.small{font-size:.82rem;margin:14px 0 8px}
+.sheet .sch .mut{margin-top:8px}
+.plink{display:inline-block;font-weight:700;color:var(--go-ink);text-underline-offset:3px;margin-bottom:6px}
 .sheet .acts{margin-top:16px}
 .sheet p{margin:2px 0 16px;color:var(--muted);font-size:.92rem}
 .acts{display:grid;gap:8px}
@@ -224,18 +228,31 @@ dialog{max-height:92vh;overflow-y:auto}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,8px);max-width:calc(100% - 32px);width:max-content;background:var(--ink);color:var(--paper);padding:11px 16px;border-radius:12px;font-weight:600;font-size:.9rem;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:10}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 
-/* QR пост */
-#poster{display:none}
-@media print{@page{size:A4;margin:0}body{background:#fff}main,dialog,.toast{display:none!important}#poster{display:flex!important}}
-.poster{width:210mm;height:297mm;flex-direction:column;justify-content:space-between;background:#F2F4F1;color:#11251B;font-family:"Golos Text",Arial,sans-serif;padding:20mm 18mm;box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.poster .ph{font-size:44pt;font-weight:800;line-height:1.02;letter-spacing:-.02em;margin:0}
-.poster .pp{font-size:16pt;line-height:1.35;margin:8mm 0 0;color:#3E5248;max-width:150mm}
-.poster .pq{display:flex;align-items:center;gap:12mm;background:#fff;border-radius:6mm;padding:10mm}
-.poster #qr{flex:none;line-height:0}
-.poster .steps{font-size:15pt;line-height:1.5;font-weight:600}
-.poster .steps span{display:block;color:#0B6B3A}
-.poster .pf{display:flex;justify-content:space-between;align-items:flex-end;font-size:11pt;color:#5A6B62;border-top:1.2mm solid #11251B;padding-top:5mm}
-.poster .pf b{font-size:14pt;color:#11251B}
+/* хяналтын самбар */
+.ctrl{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:8px;margin-top:14px}
+.ctrl .days{margin:0}
+.seg.days{display:flex;gap:3px;background:var(--off);border-radius:12px;padding:4px}
+.seg.days button{flex:1;border:0;background:transparent;border-radius:9px;padding:9px 0;font-weight:700;font-size:.95rem;color:var(--muted)}
+.seg.days button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.1)}
+.ctrl .when{display:grid;grid-template-columns:auto 1fr;gap:8px;margin:8px 0 0}
+.ctrl .when button{border:1px solid var(--line)!important;background:var(--card)!important;color:var(--muted)!important;border-radius:12px;padding:0 14px!important;font-weight:600;font-size:.95rem;gap:7px}
+.ctrl .when button[aria-pressed="true"]{background:var(--go-soft)!important;border-color:color-mix(in srgb,var(--go) 35%,transparent)!important;color:var(--go-ink)!important}
+.ctrl .when input{height:52px;font-size:1.35rem;font-weight:800;letter-spacing:-.01em;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:0 14px}
+.ctrl .when input.on{background:var(--go-soft);border-color:color-mix(in srgb,var(--go) 35%,transparent);color:var(--go-ink)}
+.floors{display:flex;gap:3px;margin:8px 0 0;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.floors button{flex:1;border:0;background:transparent;border-radius:10px;padding:10px 0;font-weight:600;font-size:.95rem;color:var(--muted)}
+.floors button[aria-pressed="true"]{background:var(--go-soft);color:var(--go-ink);font-weight:800}
+.ctrl .flt{margin:0;border:0;background:transparent;border-radius:0}
+.ctrl .flt summary{padding:12px 8px 6px;font-size:.9rem;color:var(--muted);gap:8px;justify-content:flex-start}
+.ctrl .flt summary>span:first-child{flex:none}
+.ctrl .flt summary>span:nth-child(2){flex:none}
+.tri{width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:7px solid currentColor;transition:transform .15s}
+.ctrl .flt[open] .tri{transform:rotate(90deg)}
+.ctrl .filters{padding:8px 4px 6px}
+.res{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:24px 2px 0}
+.res h1{font-size:1.6rem;margin:0;letter-spacing:-.02em}
+.meta2{color:var(--muted);font-size:.85rem;white-space:nowrap}
+.lead{margin:6px 2px 0}
 </style>
 </head>
 <body>
@@ -247,31 +264,31 @@ dialog{max-height:92vh;overflow-y:auto}
  <div class="banner" id="demo" hidden>Жишээ горим: Google Sheet холбогдоогүй тул таны тэмдэглэл зөвхөн энэ дэлгэц дээр харагдана.</div>
  <div class="banner err" id="net" hidden>Бусдын тэмдэглэлийг ачаалж чадсангүй. Хуваарь харагдсаар байна, интернэт орж ирэхэд автоматаар шинэчлэгдэнэ.</div>
 
- <div class="days" id="days" role="group" aria-label="Гараг"></div>
- <div class="when" role="group" aria-label="Цаг">
-  <button type="button" id="nowBtn"><span class="dot"></span><span id="nowTxt">Одоо</span></button>
-  <input type="time" id="timeIn" min="07:40" max="19:40" step="600" aria-label="Цаг сонгох">
- </div>
-
- <h1 id="head" aria-live="polite"></h1>
- <p class="lead" id="lead"></p>
-
-
- <details class="flt" id="flt">
-  <summary><span>Шүүлтүүр</span><span class="fon" id="fon"></span><span class="chev"></span></summary>
-  <div class="filters">
-  <label class="sel"><span>Хэр удаан суух вэ?</span>
-   <select id="need">
-    <option value="30">Хамаагүй</option>
-    <option value="45">45+ минут</option>
-    <option value="60">1+ цаг</option>
-    <option value="90">1.5+ цаг</option>
-    <option value="120">2+ цаг</option>
-   </select></label>
-  <label class="sel"><span>Ангийн дугаар</span><select id="roomSel"><option value="">Анги хайх</option></select></label>
+ <section class="ctrl" aria-label="Цаг, давхар сонгох">
+  <div class="seg days" id="days" role="group" aria-label="Гараг"></div>
+  <div class="when" role="group" aria-label="Цаг">
+   <button type="button" id="nowBtn"><span class="dot"></span><span id="nowTxt">Одоо</span></button>
+   <input type="time" id="timeIn" min="07:40" max="19:40" step="600" aria-label="Цаг сонгох">
   </div>
- </details>
- <div class="seg" id="seg" role="group" aria-label="Давхар сонгох"></div>
+  <div class="floors" id="seg" role="group" aria-label="Давхар сонгох"></div>
+  <details class="flt" id="flt">
+   <summary><span class="tri"></span><span>Шүүлтүүр</span><span class="fon" id="fon"></span></summary>
+   <div class="filters">
+    <label class="sel"><span>Хэр удаан суух вэ?</span>
+     <select id="need">
+      <option value="30">Хамаагүй</option>
+      <option value="45">45+ минут</option>
+      <option value="60">1+ цаг</option>
+      <option value="90">1.5+ цаг</option>
+      <option value="120">2+ цаг</option>
+     </select></label>
+    <label class="sel"><span>Ангийн дугаар</span><select id="roomSel"><option value="">Анги хайх</option></select></label>
+   </div>
+  </details>
+ </section>
+
+ <div class="res"><h1 id="head" aria-live="polite"></h1><span class="meta2" id="meta"></span></div>
+ <p class="lead" id="lead"></p>
  <div id="list"></div>
  <p class="busy" id="busy"></p>
  <div class="ratecard" id="rateCard"><span>Суух анги олдсон уу? 10 секундэд үнэлээрэй.</span><button type="button" class="act" id="rateCardBtn">Үнэлэх</button></div>
@@ -279,24 +296,12 @@ dialog{max-height:92vh;overflow-y:auto}
 
  <div class="note">
   ENT-221 «The Big Green Shift» оюутны туршилт.
-  <div class="links"><button class="linkbtn" type="button" id="infoBtn">Мэдээллийн тухай</button><button class="linkbtn" type="button" id="printBtn">QR пост хэвлэх</button></div>
+  <div class="links"><button class="linkbtn" type="button" id="infoBtn">Аппын тухай</button><a class="linkbtn" href="stats.html">Төслийн удирдлага</a></div>
  </div>
 </main>
 
 <dialog id="dlg"><div class="sheet" id="sheet"></div></dialog>
 <div class="toast" id="toast" role="status"></div>
-
-<div id="poster" class="poster">
- <div>
-  <p class="ph">Багийн ажилд сул анги хайж байна уу?</p>
-  <p class="pp">Давхар бүрээр тойрох хэрэггүй. Утсаараа уншуулаад 5–7-р давхрын яг одоо сул байгаа ангийг хар.</p>
- </div>
- <div class="pq">
-  <div id="qr"></div>
-  <div class="steps"><span>1. Камераа нээгээд QR-т чиглүүл</span><span>2. Ногоон өнгөтэй ангийг сонго</span><span>3. Ангид орвол «Сууна» дээр дар</span></div>
- </div>
- <div class="pf"><div><b>Сул анги</b><br>C байр, 5–7 давхар</div><div>ENT-221 «The Big Green Shift»<br>оюутны туршилт</div></div>
-</div>
 
 <script>
 // ===== ТОХИРГОО: Apps Script-ийн Web app URL =====
@@ -379,29 +384,29 @@ function render(){
 
  // цагийн товч
  $("nowBtn").setAttribute("aria-pressed",useNow);
- $("nowTxt").textContent=useNow?"Одоо "+toS(nowMin()):"Одоо руу буцах";
+ $("nowTxt").textContent="Одоо";
  [...daysEl.children].forEach((b,i)=>b.setAttribute("aria-pressed",i===day));
  if(document.activeElement!==timeIn)timeIn.value=toS(T);timeIn.classList.toggle("on",!useNow);
 
  // гарчиг
  const head=$("head"),lead=$("lead");
- const when=live?"Яг одоо":DAYS[day]+" "+toS(T)+"-д";
- if(out){head.textContent="Хичээлийн цагаас гадуур";lead.textContent="07:40–19:40 хооронд ангиудын хуваарийг харуулна. Дээрээс өөр цаг сонгоорой."}
+ $("meta").textContent=DAYS[day]+", "+toS(T)+(live?", одоо":", хуваарь");
+ if(out){head.textContent="Цагаас гадуур";lead.textContent="07:40–19:40 хооронд ангиудын хуваарийг харуулна."}
  else{
-  head.textContent=open.length?when+" "+open.length+" анги "+(NEED[need]?NEED[need]+" ":"")+"сул":when+" "+(NEED[need]?NEED[need]+" ":"")+"сул анги алга";
+  const nf=open.filter(x=>!floorF||x.floor===floorF).length;head.textContent=(nf?nf+" сул анги":"Сул анги алга")+(floorF?", "+floorF+"-р давхар":"");
   let t=weekend&&useNow?"Өнөөдөр амралтын өдөр тул Даваа гарагийн хуваарийг харуулж байна. ":"";
   if(me)t+="Та "+nice(me.name)+"-д сууж байна. ";
   if(repN)t+="Өөр "+repN+" анги хуваарийн дагуу сул ч хүнтэй гэж мэдээлэгдсэн. ";
-  t+=live?"Ангид орвол «Сууна» дээр дарж бусдад мэдэгдээрэй.":"Оюутнуудын тэмдэглэл зөвхөн одоогийн цагт харагдана.";
-  lead.textContent=t;
+  lead.textContent=t.trim();
  }
+ lead.hidden=!lead.textContent;
 
  // давхрын шүүлтүүр
  seg.innerHTML="";
- [[0,"Бүгд"],[5,"5 давхар"],[6,"6 давхар"],[7,"7 давхар"]].forEach(([f,l])=>{
+ [[0,"Бүгд"],[5,"5"],[6,"6"],[7,"7"]].forEach(([f,l])=>{
   const n=open.filter(x=>!f||x.floor===f).length;
   const b=document.createElement("button");b.type="button";b.setAttribute("aria-pressed",floorF===f);
-  b.innerHTML=l+"<small>"+(out?"–":n+" сул")+"</small>";b.onclick=()=>{floorF=f;render()};seg.appendChild(b)});
+  b.textContent=l;b.setAttribute("aria-label",(f?f+"-р давхар":"Бүх давхар")+", "+n+" сул");b.onclick=()=>{floorF=f;render()};seg.appendChild(b)});
  $("need").classList.toggle("on",need>MIN_FREE);$("fon").textContent=NEED[need]||"";
 
  // жагсаалт
@@ -520,15 +525,18 @@ function rateSheet(){
 }
 function rateState(){const done=ls.get("sa_rated")===todayKey();const b=$("rateBtn");b.textContent=done?"Үнэлсэн ★":"Үнэлэх ☆";b.classList.toggle("done",done)}
 
-// мэдээллийн тухай
+// аппын тухай
 function infoSheet(){
- const s=openDlg("Мэдээллийн тухай","sm");const w=el("div","info");
- ["Хуваарь: C байрны 5–7-р давхрын 21 ангийн хаалган дээрх 2026–2027 оны 1-р улирлын хуваарь. Хуваарь өөрчлөгдвөл бодит байдал зөрж болно.",
-  "Ногоон анги 1-ээс дээш цаг, шар анги 1 цагаас бага хугацаанд сул. 30 минутаас бага сул ангийг харуулахгүй.",
-  "«Сууна», «Хүнтэй», «Цоожтой» гэсэн тэмдэглэл бусдад 90 минут харагдаад, эсвэл хуваарийн дагуу хичээл эхлэхэд автоматаар арилна.",
-  "Нэр, утасны дугаар цуглуулахгүй. Хуудас нээгдсэн, товч дарсан цаг болон нэргүй төхөөрөмжийн кодыг л туршилтын хэмжилтэд ашиглана.",
-  "ENT-221 «The Big Green Shift» хичээлийн оюутны туршилт."].forEach(t=>w.appendChild(el("p",null,t)));
- s.appendChild(w);
+ const s=openDlg("Аппын тухай","sm");const w=el("div","info");
+ w.appendChild(el("p","lead1","C байрны 5–7-р давхрын 21 ангийн хаалган дээрх хуваариас хичээлгүй цагийг харуулна."));
+ w.appendChild(el("p","mut","07:40–20:10 хооронд ажиллана. 30 минутаас бага хугацаанд сул ангийг харуулахгүй. Хичээл эхлэхээс өмнө ангиа чөлөөлөөрэй."));
+ w.appendChild(el("p","mut","Хуваарьт хичээлгүй байсан ч анги цоожтой эсвэл хүнтэй байж болно. Оюутнуудын тэмдэглэл бусдад 90 минут харагдана."));
+ s.appendChild(w);s.appendChild(el("hr","sep"));
+ const d=el("details","sch");d.appendChild(el("summary",null,"Мэдээлэл ба нууцлал"));
+ d.appendChild(el("p","mut","Хуудас нээгдсэн цаг, QR эсвэл шууд линкээр орсон эсэх, дарсан товч, сайн дурын үнэлгээг хадгална. Нэр, утас авахгүй. Давхардлыг ялгахын тулд утас бүрт санамсаргүй нэргүй код олгоно. Хуудас нээгдсэн тоо нь хүний тоо биш."));
+ s.appendChild(d);
+ s.appendChild(el("p","mut small","2026–2027 оны I улирал, ENT-221"));
+ const a=el("a","plink","Төслийн удирдлага →");a.href="stats.html";s.appendChild(a);
 }
 
 let tt;function toast(t){const e=$("toast");e.textContent=t;e.classList.add("on");clearTimeout(tt);tt=setTimeout(()=>e.classList.remove("on"),2600)}
@@ -580,11 +588,6 @@ try{if(!sessionStorage.getItem("sa_v")){sessionStorage.setItem("sa_v","1");if(!d
 try{if(location.search)history.replaceState(null,"",location.pathname)}catch(e){}
 setInterval(()=>{if(useNow)chosen=nowMin();load();render()},60000);
 
-let qrDone=false;
-$("printBtn").onclick=()=>{
- if(!qrDone&&window.QRCode){new QRCode($("qr"),{text:location.origin+location.pathname+"?src=qr",width:250,height:250,colorDark:"#11251B",colorLight:"#ffffff"});qrDone=true}
- setTimeout(()=>window.print(),300);
-};
 </script>
 </body>
 </html>
