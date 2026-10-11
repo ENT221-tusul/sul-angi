@@ -83,7 +83,16 @@ h1{font-size:2.15rem;line-height:1.06;font-weight:800;letter-spacing:-.025em;mar
 .key i.free{background:var(--go)}.key i.short{background:var(--soon)}.key i.rep{background:transparent;box-shadow:inset 0 0 0 2px var(--warn)}
 
 /* шүүлтүүр */
-.filters{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:22px 0 0}
+.flt{margin:22px 0 0;background:var(--card);border:1.5px solid var(--line);border-radius:12px}
+.flt summary{list-style:none;display:flex;align-items:center;gap:8px;padding:11px 14px;font-weight:700;font-size:.92rem;cursor:pointer}
+.flt summary::-webkit-details-marker{display:none}
+.flt summary>span:first-child{flex:1}
+.flt .chev{transition:transform .15s}
+.flt[open] .chev{transform:rotate(-135deg);margin-top:4px}
+.fon{font-size:.78rem;font-weight:700;color:var(--go-ink);background:var(--go-soft);padding:3px 9px;border-radius:999px}
+.fon:empty{display:none}
+.flt summary:focus-visible{outline:3px solid var(--go);outline-offset:2px;border-radius:10px}
+.filters{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:2px 12px 12px}
 .sel{display:block;min-width:0}
 .sel span{display:block;font-size:.78rem;font-weight:600;color:var(--muted);margin:0 0 5px 2px}
 .sel select{appearance:none;-webkit-appearance:none;width:100%;font:inherit;font-weight:700;font-size:.92rem;color:var(--ink);background:var(--card) no-repeat right 12px center/12px 8px;border:1.5px solid var(--line);border-radius:12px;padding:10px 32px 10px 12px;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%235A6B62' stroke-width='2'/%3E%3C/svg%3E")}
@@ -207,7 +216,9 @@ dialog::backdrop{background:rgba(8,18,12,.5)}
   <span><i class="free"></i>1+ цаг сул</span><span><i class="short"></i>1 цагаас бага</span><span><i></i>Хичээлтэй</span><span><i class="rep"></i>Хүнтэй гэж мэдээлсэн</span>
  </div>
 
- <div class="filters">
+ <details class="flt" id="flt">
+  <summary><span>Шүүлтүүр</span><span class="fon" id="fon"></span><span class="chev"></span></summary>
+  <div class="filters">
   <label class="sel"><span>Хэр удаан суух вэ?</span>
    <select id="need">
     <option value="30">Хамаагүй</option>
@@ -217,7 +228,8 @@ dialog::backdrop{background:rgba(8,18,12,.5)}
     <option value="120">2+ цаг</option>
    </select></label>
   <label class="sel"><span>Ангийн дугаар</span><select id="roomSel"><option value="">Анги хайх</option></select></label>
- </div>
+  </div>
+ </details>
  <div class="seg" id="seg" role="group" aria-label="Давхар сонгох"></div>
  <div id="list"></div>
  <p class="busy" id="busy"></p>
@@ -360,7 +372,7 @@ function render(){
   const n=open.filter(x=>!f||x.floor===f).length;
   const b=document.createElement("button");b.type="button";b.setAttribute("aria-pressed",floorF===f);
   b.innerHTML=l+"<small>"+(out?"–":n+" сул")+"</small>";b.onclick=()=>{floorF=f;render()};seg.appendChild(b)});
- $("need").classList.toggle("on",need>MIN_FREE);
+ $("need").classList.toggle("on",need>MIN_FREE);$("fon").textContent=NEED[need]||"";
 
  // жагсаалт
  list.innerHTML="";const busyEl=$("busy");busyEl.textContent="";
