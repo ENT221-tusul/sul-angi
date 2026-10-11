@@ -162,6 +162,18 @@ dialog::backdrop{background:rgba(8,18,12,.5)}
 .ferr{color:var(--warn);font-size:.85rem;font-weight:600;margin:0 0 4px;min-height:1em}
 .state{font-weight:700;margin:4px 0 0}
 .state.free{color:var(--go-ink)}.state.short{color:var(--soon-ink)}.state.busy{color:var(--muted)}
+.sch{margin-top:16px}
+.sch summary{font-weight:800;font-size:1rem;cursor:pointer;padding:4px 0 6px;list-style:none;display:flex;align-items:center;gap:8px}
+.sch summary::-webkit-details-marker{display:none}
+.sch summary::before{content:"";width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid currentColor;transform:rotate(-90deg);transition:transform .15s}
+.sch[open] summary::before{transform:none}
+.srow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 2px;border-bottom:1px solid var(--line);font-size:.95rem}
+.srow .tm{color:var(--muted);font-variant-numeric:tabular-nums}
+.srow.free span:first-child{color:var(--go-ink);font-weight:700}
+.srow.cur{background:var(--go-soft);border-radius:8px;padding-left:10px;padding-right:10px;border-bottom-color:transparent}
+.srow.cur.busy{background:var(--off)}
+.srow em{font-style:normal;font-size:.72rem;font-weight:700;margin-left:8px;padding:2px 7px;border-radius:999px;background:var(--ink);color:var(--paper);vertical-align:1px}
+.sch .src{font-size:.8rem;color:var(--muted);margin-top:8px}
 .tl{position:relative;height:26px;border-radius:7px;background:var(--off);overflow:hidden;margin-top:4px}
 .tl i{position:absolute;top:0;bottom:0;background:var(--go)}
 .tl b{position:absolute;top:0;bottom:0;width:3px;margin-left:-1.5px;background:var(--ink)}
@@ -415,13 +427,17 @@ function roomSheet(name){
  const s=openDlg(nice(name));
  s.appendChild(el("p","state "+sc,(live?"Одоо: ":DAYS[day]+" "+toS(chosen)+": ")+st));
  if(x.rep)s.appendChild(el("div","tag"+(x.mine?" mine":""),(x.mine?"Та энд сууж байна":LABEL[x.rep.status])+", "+ago(x.rep.t)));
- s.appendChild(el("div","lbl",DAYS[day]+" гарагийн хуваарь"));
- const span=END-START,pct=m=>((m-START)/span*100).toFixed(2)+"%",w=windows(ROOMS[name].days[day]);
- const tl=el("div","tl");w.forEach(([a,b])=>{const i=el("i");i.style.left=pct(a);i.style.width=((b-a)/span*100).toFixed(2)+"%";tl.appendChild(i)});
- if(!x.out){const m=el("b");m.style.left=pct(chosen);tl.appendChild(m)}
- const tk=el("div","ticks");[8,10,12,14,16,18,20].forEach(h=>{const sp=el("span",null,String(h));sp.style.left=pct(h*60);tk.appendChild(sp)});
- s.appendChild(tl);s.appendChild(tk);
- const wn=el("p","wins");wn.innerHTML="<b>Сул цаг:</b> ";wn.appendChild(document.createTextNode(w.length?w.map(([a,b])=>toS(a)+"–"+toS(b)).join(", "):"энэ өдөр 30+ минут сул цаг алга"));s.appendChild(wn);
+ // өдрийн хуваарь: хичээл ба 30+ минутын сул цаг, цагийн дарааллаар
+ const segs=ROOMS[name].days[day].map(([a,b])=>({k:"busy",a:toM(a),b:toM(b)}))
+  .concat(windows(ROOMS[name].days[day]).map(([a,b])=>({k:"free",a,b}))).sort((p,q)=>p.a-q.a);
+ const det=el("details","sch");det.open=true;
+ det.appendChild(el("summary",null,DAYS[day]+" гарагийн хуваарь"));
+ if(!segs.length)det.appendChild(el("div","srow",""));
+ segs.forEach(g=>{const r=el("div","srow "+g.k+(!x.out&&g.a<=chosen&&chosen<g.b?" cur":""));
+  const l=el("span",null,g.k==="busy"?"Хичээл":"Сул");if(!x.out&&g.a<=chosen&&chosen<g.b)l.appendChild(el("em",null,live?"одоо":"сонгосон цаг"));
+  r.appendChild(l);r.appendChild(el("span","tm",toS(g.a)+"–"+toS(g.b)));det.appendChild(r)});
+ det.appendChild(el("div","src","2026–2027 оны I улирал. Хаалган дээрх хуваариас авсан."));
+ s.appendChild(det);
  if(live&&x.ok){
   const acts=el("div","acts");
   const go=st=>()=>{dlg.close();send(name,st)};
